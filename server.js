@@ -13,7 +13,9 @@ try {
 } catch (_) {}
 
 const PORT = +process.env.PORT || 3000;
-const PUBLIC = path.join(__dirname, 'public');
+const PUBLIC = fs.existsSync(path.join(__dirname, 'public')) 
+  ? path.join(__dirname, 'public') 
+  : __dirname;
 const DATA = path.join(__dirname, 'data');
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'manthanpatil1718p@gmail.com';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
@@ -104,7 +106,10 @@ function serveStatic(req, res) {
   const file = path.normalize(path.join(PUBLIC, p));
   if (!file.startsWith(PUBLIC + path.sep)) { res.writeHead(403); return res.end('Forbidden'); }
   fs.stat(file, (err, st) => {
-    if (err || !st.isFile()) { res.writeHead(404, { 'Content-Type': 'text/plain' }); return res.end('Not found'); }
+    if (err || !st.isFile()) { 
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' }); 
+      return res.end('<!doctype html><html><body style="font-family:sans-serif;background:#07090e;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;"><div><h1 style="color:#5ba8ff;">Server Running</h1><p style="color:#aaa;">The <b>public/index.html</b> file was not found in your repository.</p><p style="color:#888;">Please drag and upload the <b>public</b> folder to your GitHub repo.</p></div></body></html>'); 
+    }
     const type = MIME[path.extname(file).toLowerCase()] || 'application/octet-stream';
     const base = {
       'Content-Type': type, 'Accept-Ranges': 'bytes',
