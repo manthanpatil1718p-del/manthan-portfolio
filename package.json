@@ -1,0 +1,9 @@
+{
+  "name": "manthan-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "nodemailer": "^6.9.14" },
+  "engines": { "node": ">=18" }
+}
